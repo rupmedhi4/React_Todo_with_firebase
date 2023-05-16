@@ -1,13 +1,28 @@
 import React, { useState } from 'react'
+import {auth} from '../Firebase'
+import { createUserWithEmailAndPassword} from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 export default function Signup() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    const navigate = useNavigate();
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
        e.preventDefault();
-       console.log(email,password)
+       try{
+         const result = await createUserWithEmailAndPassword(auth, email, password)
+         console.log(result)
+         console.log("sign up success")
+        window.M.toast({html:`welcome ${result.user.email}`, classes:"green"})
+        navigate("/login")
+       }catch(err){
+       window.M.toast({html:err.message, classes:"green"})
+       console.log(err.message)
+       }
+    
+
     }
 
     return (

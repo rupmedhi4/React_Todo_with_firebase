@@ -1,13 +1,25 @@
 import React, { useState } from 'react'
+import { auth } from '../Firebase'
+import {signInWithEmailAndPassword} from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+   const  navigate = useNavigate(); 
 
-
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
        e.preventDefault();
-       console.log(email,password)
+
+       try{
+        const result = await signInWithEmailAndPassword(auth, email, password)
+        navigate("/todo")
+       window.M.toast({html:`Log in ${result.user.email}`, classes:"green"})
+      }catch(err){
+      window.M.toast({html:err.message, classes:"green"})
+     
+      }
+   
     }
 
     return (
