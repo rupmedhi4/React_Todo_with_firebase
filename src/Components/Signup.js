@@ -1,0 +1,25 @@
+import React, { useState } from 'react'
+
+export default function Signup() {
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+
+
+    const handleSubmit = (e)=>{
+       e.preventDefault();
+       console.log(email,password)
+    }
+
+    return (
+        <div className='center container' style={{maxWidth:"500px"}}>
+            <h3>Please Signup</h3>
+            <form onSubmit={handleSubmit}>
+                <div className='input-field '>
+                    <input type="email" placeholder='email' onChange={(e) => setEmail(e.target.value)} />
+                    <input type="password" placeholder='password' onChange={(e) => setPassword(e.target.value)} />
+                </div>
+                <button type='submit' className='btn blue'>Sign up</button>
+            </form>
+        </div>
+    )
+}
