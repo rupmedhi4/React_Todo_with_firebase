@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { db } from '../Firebase'
-import { doc, setDoc, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 
 export default function Todo({ user }) {
 
   const [text, setText] = useState("")
   const [todo, setTodo] = useState([])
-
-
 
   useEffect(() => {
     if (user) {
@@ -25,7 +23,7 @@ export default function Todo({ user }) {
     } else {
       console.log("error");
     }
-  }, [user]); 
+  }, [user]);
 
   const addTodo = async () => {
     try {
@@ -37,16 +35,48 @@ export default function Todo({ user }) {
     catch (err) {
       window.M.toast({ html: err.message, classes: "green" })
     }
-
   };
 
 
+  const todoDelete = async (deleteTodo) => {
+    const docRef = doc(db, "todo", user.uid);
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const updatedText = docSnap.data().text.filter((docTodo) => (
+          docTodo !== deleteTodo
+        ));
+  
+        await updateDoc(docRef, {
+          text: updatedText
+        });
+  
+        console.log("Todo deleted successfully!");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
+
   return (
-    <div>
+    <div className='container'>
       <h1>Add Todos</h1>
       <div className='input-field '>
         <input type="text" placeholder='text' value={text} onChange={(e) => setText(e.target.value)} />
         <button className='btn blue' onClick={addTodo}>Add</button>
+
+        <ul class="collection">
+          {
+            todo.map((todo, index) => (
+              <li class="collection-item" key={index}>{todo}
+                <button className="material-icons right" onClick={() => { todoDelete(todo) }}>delete</button>
+              </li>
+            ))
+          }
+        </ul>
+
+
       </div>
     </div>
   )
