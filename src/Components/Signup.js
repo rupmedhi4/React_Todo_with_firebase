@@ -30,8 +30,8 @@ export default function Signup() {
             <h3>Please Signup</h3>
             <form onSubmit={handleSubmit}>
                 <div className='input-field '>
-                    <input type="email" placeholder='email' onChange={(e) => setEmail(e.target.value)} />
-                    <input type="password" placeholder='password' onChange={(e) => setPassword(e.target.value)} />
+                    <input type="email" placeholder='email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <input type="password" placeholder='password' value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
                 <button type='submit' className='btn blue'>Sign up</button>
             </form>
